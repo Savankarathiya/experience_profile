@@ -1,0 +1,2216 @@
+/* ==========================================================================
+   SAVAN KARATHIYA - CAREEROS DASHBOARD & COMMAND CENTER
+   All-in-One: Job Scout, ATS Matcher, International CVs, Interview Calendar & Upskilling
+   ========================================================================== */
+
+/* Main CareerOS Container */
+.career-os-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.98);
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.career-os-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+/* CareerOS Header */
+.cos-header {
+  height: 68px;
+  background: rgba(11, 15, 25, 0.95);
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.75rem;
+  backdrop-filter: blur(16px);
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.cos-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.cos-logo-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+
+.cos-badge-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: #fff;
+  font-size: 1.1rem;
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.4);
+}
+
+.cos-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.cos-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cos-tag-pill {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.cos-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Nav Tabs in Header */
+.cos-nav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 0.3rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.cos-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all var(--transition-fast);
+}
+
+.cos-tab-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.cos-tab-btn.active {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.25) 0%, rgba(99, 102, 241, 0.25) 100%);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.2);
+}
+
+.cos-tab-badge {
+  background: rgba(99, 102, 241, 0.25);
+  color: #a5b4fc;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+}
+
+/* Header Right Actions */
+.cos-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cos-btn-icon {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.cos-btn-icon:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border-color: var(--border-light);
+}
+
+.cos-back-btn {
+  background: rgba(6, 182, 212, 0.12);
+  color: var(--accent-cyan-light);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all var(--transition-fast);
+}
+
+.cos-back-btn:hover {
+  background: rgba(6, 182, 212, 0.22);
+  border-color: var(--accent-cyan);
+}
+
+/* CareerOS Body Content */
+.cos-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem 1.75rem 3rem;
+  position: relative;
+}
+
+.cos-tab-pane {
+  display: none;
+  animation: fadeInPane 0.25s ease forwards;
+}
+
+.cos-tab-pane.active {
+  display: block;
+}
+
+@keyframes fadeInPane {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Common Section Headers in CareerOS */
+.cos-section-intro {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.cos-heading {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.cos-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  max-width: 800px;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   MODULE 1: JOB SCOUT & MULTI-PORTAL LAUNCHER
+   ========================================================================== */
+.scout-controls-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  backdrop-filter: blur(12px);
+}
+
+.scout-filters-row {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr auto;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.scout-input-group label {
+  display: block;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.scout-input {
+  width: 100%;
+  background: rgba(6, 8, 14, 0.7);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.85rem;
+  color: var(--text-primary);
+  font-size: 0.88rem;
+  transition: border-color var(--transition-fast);
+}
+
+.scout-input:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+}
+
+.quick-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+  align-items: center;
+}
+
+.quick-filter-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.filter-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filter-chip:hover,
+.filter-chip.active {
+  background: rgba(6, 182, 212, 0.15);
+  color: var(--accent-cyan-light);
+  border-color: rgba(6, 182, 212, 0.4);
+}
+
+.portals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.15rem;
+}
+
+.portal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.portal-card:hover {
+  border-color: var(--border-cyan);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md), 0 0 20px rgba(6, 182, 212, 0.12);
+}
+
+.portal-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  margin-bottom: 0.85rem;
+}
+
+.portal-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-light);
+}
+
+.portal-name {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.portal-type-badge {
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  background: rgba(99, 102, 241, 0.15);
+  color: #a5b4fc;
+}
+
+.portal-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.portal-query-preview {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 0.45rem 0.65rem;
+  border-radius: 6px;
+  color: var(--accent-cyan-light);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.portal-action-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.portal-action-btn:hover {
+  background: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.35);
+}
+
+/* ==========================================================================
+   MODULE 2: KANBAN APPLICATION PIPELINE
+   ========================================================================== */
+.kanban-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.kanban-board-container {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  padding-bottom: 1.5rem;
+  min-height: calc(100vh - 270px);
+}
+
+.kanban-column {
+  flex: 0 0 310px;
+  background: rgba(15, 22, 36, 0.5);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 280px);
+}
+
+.kanban-column-header {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.02);
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: var(--radius-md);
+}
+
+.kanban-col-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.kanban-col-indicator {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.kanban-col-title {
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.kanban-col-count {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  color: var(--text-secondary);
+}
+
+.kanban-cards-list {
+  padding: 0.75rem;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.kanban-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem;
+  cursor: grab;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.kanban-card:hover {
+  border-color: var(--border-cyan);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.kanban-card-company {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  margin-bottom: 0.2rem;
+}
+
+.kanban-card-title {
+  font-weight: 700;
+  font-size: 0.92rem;
+  margin-bottom: 0.45rem;
+  line-height: 1.3;
+}
+
+.kanban-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.kanban-card-badge {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+.kanban-card-badge.score {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.3);
+  font-weight: 600;
+}
+
+.kanban-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.kanban-card-actions {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.kanban-mini-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.kanban-mini-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ==========================================================================
+   MODULE 3: ATS RESUME TAILORER & INTERNATIONAL FORMATTER
+   ========================================================================== */
+.ats-workspace-grid {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .ats-workspace-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ats-input-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  position: sticky;
+  top: 1rem;
+}
+
+.ats-score-meter-box {
+  background: rgba(6, 8, 14, 0.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.score-dial {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  background: conic-gradient(var(--accent-cyan) var(--score-pct, 85%), rgba(255, 255, 255, 0.08) 0deg);
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.3);
+}
+
+.score-dial::before {
+  content: '';
+  position: absolute;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+}
+
+.score-number {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: #fff;
+  line-height: 1;
+}
+
+.score-dial-label {
+  position: relative;
+  font-size: 0.6rem;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan-light);
+  text-transform: uppercase;
+}
+
+.score-meta-text {
+  flex: 1;
+}
+
+.score-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+
+.score-hint {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.ats-country-tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+  overflow-x: auto;
+  padding-bottom: 0.4rem;
+}
+
+.country-tab-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.75rem;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all var(--transition-fast);
+}
+
+.country-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.country-tab-btn.active {
+  background: rgba(6, 182, 212, 0.15);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan-light);
+}
+
+.keyword-chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.kw-chip {
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.kw-chip.matched {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.kw-chip.missing {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Resume Document Preview */
+.resume-preview-panel {
+  background: #ffffff;
+  color: #1e293b;
+  border-radius: var(--radius-md);
+  padding: 3rem 3.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+  line-height: 1.5;
+  min-height: 900px;
+  position: relative;
+}
+
+.resume-header-block {
+  border-bottom: 2px solid #0f172a;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.resume-applicant-name {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.2rem;
+  text-transform: uppercase;
+}
+
+.resume-applicant-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0284c7;
+  margin-bottom: 0.5rem;
+}
+
+.resume-contact-line {
+  font-size: 0.82rem;
+  color: #475569;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.resume-section {
+  margin-bottom: 1.5rem;
+}
+
+.resume-section-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #0f172a;
+  border-bottom: 1px solid #cbd5e1;
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.resume-summary-text {
+  font-size: 0.88rem;
+  color: #334155;
+  line-height: 1.6;
+}
+
+.resume-exp-item {
+  margin-bottom: 1.25rem;
+}
+
+.resume-exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.2rem;
+}
+
+.resume-exp-role {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #0f172a;
+}
+
+.resume-exp-company {
+  color: #0284c7;
+  font-weight: 600;
+}
+
+.resume-exp-date {
+  font-size: 0.82rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.resume-bullets {
+  margin: 0.4rem 0 0 1.2rem;
+  padding: 0;
+  font-size: 0.85rem;
+  color: #334155;
+}
+
+.resume-bullets li {
+  margin-bottom: 0.35rem;
+  line-height: 1.5;
+}
+
+.resume-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem 1.5rem;
+  font-size: 0.83rem;
+  color: #334155;
+}
+
+/* ==========================================================================
+   MODULE 4: COVER LETTER GENERATOR
+   ========================================================================== */
+.cover-letter-workspace {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 1000px) {
+  .cover-letter-workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cl-output-paper {
+  background: #ffffff;
+  color: #1e293b;
+  border-radius: var(--radius-md);
+  padding: 3.5rem 4rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+  min-height: 700px;
+}
+
+.cl-header {
+  border-bottom: 2px solid #0284c7;
+  padding-bottom: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.cl-name {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0f172a;
+  text-transform: uppercase;
+}
+
+.cl-title {
+  color: #0284c7;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.cl-contact {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin-top: 0.35rem;
+}
+
+.cl-body {
+  font-size: 0.92rem;
+  color: #334155;
+  line-height: 1.7;
+}
+
+.cl-body p {
+  margin-bottom: 1.15rem;
+}
+
+.cl-recipient-block {
+  margin-bottom: 1.5rem;
+  font-size: 0.88rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.cl-date {
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.cl-recipient-name {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.cl-subject-line {
+  background: #f1f5f9;
+  border-left: 3px solid #0284c7;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.88rem;
+  color: #0f172a;
+  margin-bottom: 1.5rem;
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+}
+
+.cl-signoff {
+  margin-top: 2rem;
+  padding-top: 0.5rem;
+}
+
+.cl-signature-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-top: 0.35rem;
+}
+
+.cl-signature-title {
+  font-size: 0.85rem;
+  color: #0284c7;
+  font-weight: 600;
+}
+
+.cl-signature-links {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin-top: 0.2rem;
+}
+
+/* Saved Cover Letters Modal Styling */
+.saved-cl-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.75rem;
+  transition: all var(--transition-fast);
+}
+
+.saved-cl-card:hover {
+  border-color: var(--accent-cyan);
+  background: rgba(15, 23, 42, 0.85);
+}
+
+.saved-cl-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.saved-cl-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.saved-cl-meta {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.saved-cl-preview {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-bottom: 0.6rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.saved-cl-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+/* ==========================================================================
+   MODULE 5: INTERVIEW CALENDAR & MULTI-TIMEZONE HUB
+   ========================================================================== */
+.tz-clocks-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.tz-clock-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.tz-clock-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.tz-label {
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.tz-badge {
+  font-size: 0.65rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  background: rgba(6, 182, 212, 0.15);
+  color: var(--accent-cyan-light);
+}
+
+.tz-badge.ist {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  font-weight: 700;
+}
+
+.tz-time {
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.tz-date {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.calendar-main-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 1.5rem;
+}
+
+@media (max-width: 950px) {
+  .calendar-main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.calendar-view-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.calendar-month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.calendar-month-title {
+  font-weight: 700;
+  font-size: 1.15rem;
+  font-family: var(--font-display);
+}
+
+.cal-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.4rem;
+}
+
+.cal-day-header {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 0.4rem;
+  text-transform: uppercase;
+}
+
+.cal-day-cell {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  min-height: 75px;
+  padding: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-fast);
+}
+
+.cal-day-cell:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-light);
+}
+
+.cal-day-cell.today {
+  border-color: var(--accent-cyan);
+  background: rgba(6, 182, 212, 0.06);
+}
+
+.cal-day-num {
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.cal-interview-pill {
+  font-size: 0.65rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  background: rgba(99, 102, 241, 0.25);
+  color: #a5b4fc;
+  border-left: 2px solid var(--accent-indigo);
+  margin-bottom: 0.2rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.agenda-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.agenda-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 1.15rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.agenda-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--accent-cyan);
+}
+
+.agenda-time-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--accent-cyan-light);
+  margin-bottom: 0.35rem;
+}
+
+.agenda-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+
+.agenda-company {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.6rem;
+}
+
+.agenda-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* ==========================================================================
+   MODULE 6: UPSKILLING & DREAM JOB LEARNING PORTAL
+   ========================================================================== */
+.dream-roles-tabs {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.dream-role-pill {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.dream-role-pill:hover {
+  border-color: var(--border-cyan);
+}
+
+.dream-role-pill.active {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+}
+
+.dream-role-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.dream-role-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.dream-role-match {
+  font-size: 0.72rem;
+  color: #34d399;
+  font-family: var(--font-mono);
+}
+
+.learning-dashboard-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 1000px) {
+  .learning-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.skill-gap-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.skill-radar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.skill-radar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.skill-radar-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+}
+
+.skill-radar-name {
+  font-weight: 600;
+}
+
+.skill-radar-score {
+  font-family: var(--font-mono);
+  color: var(--accent-cyan-light);
+}
+
+.skill-progress-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.skill-progress-bar {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #06b6d4, #6366f1);
+}
+
+.learning-sprint-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sprint-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.sprint-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.sprint-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.sprint-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(6, 182, 212, 0.15);
+  color: var(--accent-cyan-light);
+  font-weight: 700;
+}
+
+.sprint-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.sprint-tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.sprint-task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.sprint-task-checkbox {
+  margin-top: 0.2rem;
+  accent-color: var(--accent-cyan);
+}
+
+.sprint-resources-box {
+  background: rgba(6, 8, 14, 0.5);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-subtle);
+}
+
+.sprint-resources-title {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.resource-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--accent-cyan-light);
+  text-decoration: none;
+  margin-right: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.resource-link:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   PRINT STYLES FOR CLEAN ATS RESUME & COVER LETTER
+   ========================================================================== */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .career-os-overlay {
+    position: static;
+    opacity: 1;
+    pointer-events: auto;
+    background: transparent !important;
+  }
+
+  #resumePreviewPanel,
+  #resumePreviewPanel *,
+  #clOutputPaper,
+  #clOutputPaper * {
+    visibility: visible;
+  }
+
+  #resumePreviewPanel,
+  #clOutputPaper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
+
+
+/* ==========================================================================
+   NAVBAR CAREEROS TOGGLE BUTTON
+   ========================================================================== */
+.career-os-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.18) 0%, rgba(99, 102, 241, 0.22) 100%);
+  border: 1px solid rgba(6, 182, 212, 0.45);
+  border-radius: var(--radius-full);
+  color: #67e8f9;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-body);
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.2);
+}
+
+.career-os-nav-btn:hover {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.35) 0%, rgba(99, 102, 241, 0.4) 100%);
+  border-color: #38bdf8;
+  color: #fff;
+  box-shadow: 0 0 24px rgba(6, 182, 212, 0.45);
+  transform: translateY(-1px);
+}
+
+.cos-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: pulseBeacon 1.8s infinite;
+}
+
+.cos-pill-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  text-transform: uppercase;
+}
+
+/* Modals & Dialogs within CareerOS */
+.cos-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.cos-modal-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cos-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 640px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 1.75rem;
+  box-shadow: var(--shadow-lg), 0 0 30px rgba(6, 182, 212, 0.2);
+  transform: translateY(10px);
+  transition: transform 0.2s ease;
+}
+
+.cos-modal-backdrop.active .cos-modal-card {
+  transform: translateY(0);
+}
+
+.cos-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 0.75rem;
+}
+
+.cos-modal-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-family: var(--font-display);
+}
+
+.cos-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+}
+
+.cos-modal-close:hover {
+  color: #fff;
+}
+
+/* Settings Tab Styling */
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+.settings-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.settings-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.settings-card-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.api-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  margin-top: 0.6rem;
+}
+
+.api-status-badge.connected {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.api-status-badge.testing {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  animation: pulse 1.5s infinite;
+}
+
+.api-status-badge.failed {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.api-status-badge.disconnected {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+
+/* ==========================================================================
+   DAY 2 ENHANCEMENTS: KANBAN METRICS, DRAG & DROP, & SEARCH
+   ========================================================================== */
+.kanban-metrics-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.kanban-metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(10px);
+}
+
+.kanban-metric-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+}
+
+.kanban-metric-val {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+
+.kanban-filter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.kanban-search-box {
+  flex: 1;
+  min-width: 260px;
+  max-width: 480px;
+  position: relative;
+}
+
+.kanban-search-input {
+  width: 100%;
+  background: rgba(6, 8, 14, 0.7);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.85rem 0.55rem 2.2rem;
+  color: var(--text-primary);
+  font-size: 0.84rem;
+  transition: all var(--transition-fast);
+}
+
+.kanban-search-input:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.25);
+}
+
+.kanban-search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* Drag and Drop visual feedback */
+.kanban-card.is-dragging {
+  opacity: 0.35;
+  transform: scale(0.96) rotate(1deg);
+  border: 1px dashed var(--accent-cyan);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+}
+
+.kanban-cards-list.drag-over {
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px dashed rgba(6, 182, 212, 0.5);
+  border-radius: var(--radius-sm);
+}
+
+/* Card Quick Action Chips */
+.kanban-card-quick-actions {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+  padding-top: 0.4rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.06);
+}
+
+.card-action-chip {
+  font-size: 0.68rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all var(--transition-fast);
+}
+
+.card-action-chip:hover {
+  background: rgba(6, 182, 212, 0.15);
+  color: var(--accent-cyan-light);
+  border-color: rgba(6, 182, 212, 0.35);
+}
+
+
+/* ==========================================================================
+   DAY 3: DEEP ATS MATCHER, KEYWORD INJECTION & COMPLIANCE AUDIT
+   ========================================================================== */
+.ats-audit-card {
+  background: rgba(6, 8, 14, 0.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.15rem;
+  margin-top: 1.25rem;
+}
+
+.ats-audit-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan-light);
+  margin-bottom: 0.65rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ats-audit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ats-audit-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.ats-audit-icon {
+  color: #34d399;
+  font-weight: bold;
+}
+
+.kw-cat-title {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0.65rem 0 0.35rem;
+}
+
+.inject-kw-chip {
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.inject-kw-chip:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.2);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.3);
+}
+
+/* Enhanced Print Styles for Clean Multi-Page Resumes */
+@media print {
+  @page {
+    margin: 12mm 15mm;
+    size: letter portrait;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  .career-os-overlay {
+    position: static !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+  }
+
+  .cos-header,
+  .cos-section-intro,
+  .ats-input-card,
+  .nav-actions,
+  .navbar,
+  button {
+    display: none !important;
+  }
+
+  .resume-preview-panel,
+  .cl-output-paper {
+    position: static !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    min-height: auto !important;
+    color: #0f172a !important;
+    font-size: 10.5pt !important;
+    line-height: 1.5 !important;
+  }
+
+  .cl-header {
+    border-bottom: 2pt solid #0284c7 !important;
+    padding-bottom: 8pt !important;
+    margin-bottom: 14pt !important;
+  }
+
+  .cl-name {
+    color: #0f172a !important;
+    font-size: 18pt !important;
+    font-weight: 800 !important;
+  }
+
+  .cl-title {
+    color: #0284c7 !important;
+    font-size: 11pt !important;
+  }
+
+  .cl-contact {
+    color: #475569 !important;
+    font-size: 9pt !important;
+  }
+
+  .cl-subject-line {
+    background: #f1f5f9 !important;
+    border-left: 3pt solid #0284c7 !important;
+    padding: 6pt 8pt !important;
+    margin-bottom: 12pt !important;
+    font-size: 10pt !important;
+  }
+
+  .cl-body p {
+    margin-bottom: 10pt !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .resume-applicant-name {
+    color: #0f172a !important;
+    font-size: 20pt !important;
+  }
+
+  .resume-applicant-title {
+    color: #0284c7 !important;
+    font-size: 12pt !important;
+  }
+
+  .resume-section-title {
+    color: #0f172a !important;
+    border-bottom: 1.5pt solid #0f172a !important;
+    font-size: 10.5pt !important;
+    margin-top: 10pt !important;
+    page-break-after: avoid;
+  }
+
+  .resume-exp-item {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin-bottom: 9pt !important;
+  }
+
+  .resume-bullets li {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  a {
+    color: #0f172a !important;
+    text-decoration: none !important;
+  }
+}
+
+/* ==========================================================================
+   DAY 5 ENHANCEMENTS: GEMINI AI SUITE (BULLET REWRITER, COVER LETTER, INTERVIEW COACH)
+   ========================================================================== */
+.cos-ai-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(168, 85, 247, 0.15));
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: var(--accent-cyan-light);
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+.cos-ai-bullet-card {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: 0.85rem;
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.cos-ai-bullet-card:hover {
+  border-color: rgba(6, 182, 212, 0.4);
+  transform: translateY(-1px);
+}
+
+.cos-ai-bullet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.cos-ai-bullet-text {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin-bottom: 0.6rem;
+}
+
+.cos-ai-bullet-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.cos-ai-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+  text-align: center;
+  gap: 0.75rem;
+}
+
+.cos-ai-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(6, 182, 212, 0.2);
+  border-top-color: var(--accent-cyan-light);
+  border-radius: 50%;
+  animation: cosSpin 0.8s linear infinite;
+}
+
+@keyframes cosSpin {
+  to { transform: rotate(360deg); }
+}
+
+.cos-ai-interview-qa {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.cos-ai-q-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent-cyan-light);
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.cos-ai-a-box {
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 3px solid var(--accent-purple);
+  padding: 0.75rem 1rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+}
+
+.cos-ai-reverse-q {
+  background: rgba(16, 185, 129, 0.08);
+  border-left: 3px solid #10b981;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  color: #d1fae5;
+}
+
+/* ==========================================================================
+   DAY 6 ENHANCEMENTS: CALENDAR NAVIGATION, DYNAMIC CONVERTER & LEARNING TRACKER
+   ========================================================================== */
+.cal-day-cell.selected {
+  border-color: var(--accent-cyan-light);
+  background: rgba(6, 182, 212, 0.12);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.25);
+}
+
+.cal-day-cell.has-interview {
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+.skill-radar-action-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.skill-radar-action-btn:hover {
+  background: var(--accent-cyan);
+  color: #fff;
+  border-color: var(--accent-cyan);
+}
+
+.track-progress-badge {
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.sprint-add-task-btn {
+  background: transparent;
+  border: 1px dashed var(--border-light);
+  color: var(--accent-cyan-light);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.75rem;
+  font-size: 0.78rem;
+  width: 100%;
+  margin-top: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  transition: all var(--transition-fast);
+}
+
+.sprint-add-task-btn:hover {
+  border-color: var(--accent-cyan);
+  background: rgba(6, 182, 212, 0.08);
+}
+
+/* ==========================================================================
+   DAY 7 ENHANCEMENTS: FULL RESPONSIVE MOBILE, TABLET & TOUCH OPTIMIZATIONS
+   ========================================================================== */
+@media (max-width: 768px) {
+  .cos-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .cos-header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .cos-nav-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+    padding-bottom: 0.5rem;
+    scrollbar-width: none;
+  }
+
+  .cos-nav-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cos-tab-btn {
+    white-space: nowrap;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.78rem;
+  }
+
+  .ats-workspace-grid,
+  .cover-letter-workspace,
+  .calendar-main-grid,
+  .learning-dashboard-grid,
+  .settings-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .tz-clocks-bar {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.6rem;
+  }
+
+  .tz-clock-card {
+    padding: 0.65rem 0.75rem;
+  }
+
+  .tz-time {
+    font-size: 1.05rem;
+  }
+
+  .cal-day-cell {
+    min-height: 50px;
+    padding: 0.25rem;
+  }
+
+  .cal-day-num {
+    font-size: 0.7rem;
+  }
+
+  .cal-interview-pill {
+    font-size: 0.58rem;
+    padding: 0.1rem 0.25rem;
+  }
+
+  .kanban-board {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .kanban-column {
+    min-width: 270px;
+    flex-shrink: 0;
+  }
+
+  .cos-modal-card {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    max-height: 90vh !important;
+    padding: 1.25rem 1rem !important;
+    margin: 1rem auto;
+  }
+}
