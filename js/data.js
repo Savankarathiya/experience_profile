@@ -16,10 +16,10 @@ export const PROFILE_INFO = {
   email: "savankarathiya@gmail.com",
   linkedin: "https://www.linkedin.com/in/savan-karathiya",
   linkedinHandle: "savan-karathiya",
-  location: "Greater Ahmedabad Area, Gujarat, India",
+  location: "Ahmedabad, Gujarat, India (Open to India & Global Roles)",
   experienceYears: "10+",
   status: "Available for Technical Leadership & Architect Roles",
-  workPreference: "Remote / Hybrid / Onsite (Ahmedabad / Relocation Open)",
+  workPreference: "India (Bengaluru, Hyderabad, Pune, NCR, Remote) & Global Remote / Relocation",
   summary: `Experienced and Results-Driven Full Stack Web Developer and Technical Lead with 10 years in software development. Proficient in JavaScript, Node.js, React.js, Redux, Python, TypeScript, PostgreSQL, MongoDB, and Elasticsearch, with working knowledge of Java. Hands-on experience in building scalable web applications, developing microservices, implementing core logic, and integrating third-party gateways. Proven track record of identifying root causes, leading engineering squads, and delivering resilient data-driven architectures.`
 };
 

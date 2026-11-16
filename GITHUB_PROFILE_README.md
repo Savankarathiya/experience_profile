@@ -2,7 +2,7 @@
 
   <!-- Header Banner -->
   <a href="https://github.com/Savankarathiya">
-    <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=0,16,35,0,182,212,16,185,129&height=220&section=header&text=Savan%20Karathiya&fontSize=52&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Technical%20Lead%20%7C%20Full%20Stack%20%26%20Distributed%20Systems%20Architect&descFontSize=20&descAlignY=62&descColor=06b6d4" width="100%" alt="Savan Karathiya Header Banner" />
+    <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0b0f19,50:06b6d4,100:10b981&height=220&section=header&text=Savan%20Karathiya&fontSize=50&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Technical%20Lead%20%7C%20Full%20Stack%20%26%20Distributed%20Systems%20Architect&descFontSize=20&descAlignY=62&descColor=06b6d4" width="100%" alt="Savan Karathiya Header Banner" />
   </a>
 
   <!-- Animated Typing SVG -->
@@ -27,7 +27,7 @@
     <img src="https://img.shields.io/badge/Scale-50%2C000%2B%20QPS-06B6D4?style=flat-square&logo=fastapi&logoColor=white" alt="Scale" />
     <img src="https://img.shields.io/badge/Search%20Data-10M%2B%20Records-F59E0B?style=flat-square&logo=elasticsearch&logoColor=white" alt="Data" />
     <img src="https://img.shields.io/badge/Mentorship-15%2B%20Engineers-8B5CF6?style=flat-square&logo=handshake&logoColor=white" alt="Mentorship" />
-    <img src="https://img.shields.io/badge/Availability-Global%20Remote%20%2F%20Relocation-EC4899?style=flat-square&logo=google-maps&logoColor=white" alt="Location" />
+    <img src="https://img.shields.io/badge/Availability-India%20%26%20Global%20Remote%20%2F%20Relocation-EC4899?style=flat-square&logo=google-maps&logoColor=white" alt="Location" />
   </p>
 
 </div>
@@ -41,7 +41,7 @@ Accomplished **Technical Lead and Systems Architect** with a decade (**10+ years
 - 🏢 **Current:** Technical Lead at **Rapidops Inc.**, driving architecture strategy, RFC standards, and delivery across cross-functional engineering squads.
 - 🏛️ **Background:** Former Consultant at **Infosys Ltd.**, leading enterprise React and Node.js solutions for Fortune 500 clients.
 - ⚡ **Core Competence:** Designing sub-25ms P99 latency microservices handling **50,000+ QPS**, tuning **Elasticsearch clusters over 10M+ records**, and bridging business strategy with technical execution.
-- 🌍 **Target Horizons:** Staff Software Engineer, Principal Architect, or Engineering Leadership roles across **USA, Canada, UK/Europe, UAE, Australia/NZ, and Singapore** (Remote & Relocation Ready).
+- 🌍 **Target Horizons:** Staff Software Engineer, Principal Architect, or Engineering Leadership roles across **India** *(Bengaluru, Hyderabad, Pune, NCR, Ahmedabad, Remote)* as well as **USA, Canada, UK/Europe, UAE, Australia/NZ, and Singapore** (Remote, Hybrid, and Relocation Ready).
 
 ---
 
@@ -136,22 +136,14 @@ Accomplished **Technical Lead and Systems Architect** with a decade (**10+ years
 
 ### 📈 GitHub Analytics & Activity
 
-<div align="center">
-  <table border="0">
-    <tr>
-      <td width="50%">
-        <img src="https://github-readme-stats.vercel.app/api?username=Savankarathiya&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0b0f19&title_color=06b6d4&text_color=94a3b8&icon_color=10b981" alt="Savan Karathiya's GitHub Stats" width="100%" />
-      </td>
-      <td width="50%">
-        <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Savankarathiya&layout=compact&theme=tokyonight&hide_border=true&bg_color=0b0f19&title_color=06b6d4&text_color=94a3b8" alt="Top Languages" width="100%" />
-      </td>
-    </tr>
-  </table>
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=Savankarathiya&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0b0f19&title_color=06b6d4&text_color=94a3b8&icon_color=10b981&include_all_commits=true&count_private=true" alt="Savan Karathiya's GitHub Stats" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Savankarathiya&layout=compact&theme=tokyonight&hide_border=true&bg_color=0b0f19&title_color=06b6d4&text_color=94a3b8&langs_count=8" alt="Top Languages" />
+</p>
 
-  <br>
-
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=Savankarathiya&theme=tokyonight&hide_border=true&background=0b0f19&stroke=06b6d4&ring=06b6d4&fire=f59e0b&currStreakLabel=06b6d4" alt="GitHub Streak Stats" width="95%" />
-</div>
+<p align="center">
+  <img src="https://streak-stats.demolab.com/?user=Savankarathiya&theme=tokyonight&hide_border=true&background=0b0f19&stroke=06b6d4&ring=06b6d4&fire=f59e0b&currStreakLabel=06b6d4" alt="GitHub Streak Stats" />
+</p>
 
 ---
 
@@ -170,7 +162,7 @@ Accomplished **Technical Lead and Systems Architect** with a decade (**10+ years
 - 💼 **LinkedIn:** [linkedin.com/in/savan-karathiya](https://www.linkedin.com/in/savan-karathiya)
 - 📧 **Direct Email:** [savankarathiya@gmail.com](mailto:savankarathiya@gmail.com)
 - 🌐 **Interactive Portfolio & CareerOS Hub:** [experience_profile](https://github.com/Savankarathiya/experience_profile)
-- 📍 **Location:** Ahmedabad, Gujarat, India *(Available for Remote Leadership & Relocation)*
+- 📍 **Location:** Ahmedabad, Gujarat, India *(Open to India Tech Leadership [Bengaluru / Hyderabad / Pune / NCR / Remote] & Global Opportunities)*
 
 <div align="center">
   <sub>Crafted with passion for scalable systems • © 2026 Savan Karathiya</sub>

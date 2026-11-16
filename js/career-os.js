@@ -269,7 +269,7 @@ export class CareerOS {
     this.learningTracks = [];
     this.coverLetters = [];
     this.activeTab = 'scout';
-    this.currentCountryFormat = 'us'; // 'us' | 'eu' | 'uae' | 'apac'
+    this.currentCountryFormat = 'in'; // 'in' | 'us' | 'eu' | 'uae' | 'apac'
     this.currentRoleTier = 'lead';    // 'lead' | 'staff' | 'senior'
     this.currentCoverLetterTier = 'lead'; // 'lead' | 'staff' | 'senior'
     this.kanbanSearchQuery = '';
@@ -851,8 +851,32 @@ export class CareerOS {
 
     const PORTALS = [
       {
-        name: 'LinkedIn Worldwide',
+        name: 'LinkedIn India (Tech Hubs & Remote)',
         icon: '💼',
+        type: 'Bengaluru, Hyderabad, Pune, NCR & Remote',
+        desc: 'Pre-filtered search with Boolean logic for Staff Engineer, Technical Lead, and Systems Architect roles across India.',
+        query: `keywords=${cleanAllTitles}&location=India`,
+        url: `https://www.linkedin.com/jobs/search/?keywords=${cleanAllTitles}&location=India`
+      },
+      {
+        name: 'Naukri Tech Leadership (India)',
+        icon: '🇮🇳',
+        type: 'India #1 Enterprise Tech & GCC Portal',
+        desc: 'Direct listings for Technical Lead, Architect, and Global Capability Center (GCC) roles across Indian tech hubs.',
+        query: `k=technical+lead+systems+architect&l=Bengaluru,Hyderabad,Pune,Ahmedabad`,
+        url: `https://www.naukri.com/technical-lead-jobs-in-bengaluru-hyderabad-pune-ahmedabad?k=technical%20lead%20systems%20architect`
+      },
+      {
+        name: 'Instahyre & Cutshort (India Tech Unicorns)',
+        icon: '⚡',
+        type: 'Curated Indian Tech Startups & Unicorns',
+        desc: 'Direct hiring platform for top Indian unicorns and high-growth engineering teams with competitive CTCs.',
+        query: `role=technical-lead`,
+        url: `https://www.instahyre.com/jobs-for-technical-lead/`
+      },
+      {
+        name: 'LinkedIn Worldwide',
+        icon: '🌐',
         type: 'Global Corporate & Remote',
         desc: 'Pre-filtered search with Boolean logic for senior architecture and engineering leadership roles.',
         query: `keywords=${cleanAllTitles}&location=Remote`,
@@ -971,7 +995,10 @@ export class CareerOS {
     const titlesInput = document.getElementById('scoutTargetTitles');
     const locInput = document.getElementById('scoutLocations');
 
-    if (filterKey === 'us-remote') {
+    if (filterKey === 'india') {
+      if (locInput) locInput.value = 'India, Bengaluru, Hyderabad, Pune, NCR, Ahmedabad, Remote';
+      if (titlesInput) titlesInput.value = 'Technical Lead, Systems Architect, Staff Software Engineer, Full Stack Lead';
+    } else if (filterKey === 'us-remote') {
       if (locInput) locInput.value = 'Remote (USA & Canada)';
       if (titlesInput) titlesInput.value = 'Technical Lead, Systems Architect, Staff Engineer';
     } else if (filterKey === 'uk-eu') {
@@ -988,7 +1015,7 @@ export class CareerOS {
     } else if (filterKey === 'react-node') {
       if (titlesInput) titlesInput.value = 'Lead Full Stack Engineer, React Node Architect';
     } else {
-      if (locInput) locInput.value = 'Remote, USA, Canada, Europe, UK, UAE, Australia, Singapore';
+      if (locInput) locInput.value = 'India (Bengaluru, Hyderabad, Pune, NCR, Remote), USA, Canada, Europe, UK, UAE, Singapore';
       if (titlesInput) titlesInput.value = 'Technical Lead, Systems Architect, Staff Software Engineer';
     }
 
@@ -1126,8 +1153,8 @@ export class CareerOS {
             });
           }
           if (job.country) {
-            const countryMap = { US: 'us', CA: 'us', UK: 'eu', EU: 'eu', UAE: 'uae', AU: 'apac', NZ: 'apac', SG: 'apac' };
-            const matchedFormat = countryMap[job.country] || 'us';
+            const countryMap = { IN: 'in', US: 'us', CA: 'us', UK: 'eu', EU: 'eu', UAE: 'uae', AU: 'apac', NZ: 'apac', SG: 'apac' };
+            const matchedFormat = countryMap[job.country] || 'in';
             this.currentCountryFormat = matchedFormat;
             document.querySelectorAll('#cosCountryTabs .country-tab-btn').forEach(b => {
               b.classList.toggle('active', b.dataset.country === matchedFormat);
@@ -1667,7 +1694,14 @@ Requirements:
 
     // Country specific contact line
     let contactLine = '';
-    if (format === 'us') {
+    if (format === 'in') {
+      // India Premier Tech Lead & GCC Architect: Open to India tech hubs (Bengaluru, Hyderabad, Pune, NCR, Remote)
+      contactLine = `
+        <span>${this.escapeHtml(info.location || 'Ahmedabad, India')} • Open to Bengaluru, Hyderabad, Pune, NCR &amp; Remote India</span>
+        <span>•</span>
+        <span>${this.escapeHtml(info.email)} • ${this.escapeHtml(info.linkedin || '')}</span>
+      `;
+    } else if (format === 'us') {
       // Strict US ATS: Single-column, no photo, no full street, city/country only
       contactLine = `
         <span>${this.escapeHtml(info.location || 'Remote')}</span>
@@ -1812,6 +1846,7 @@ Requirements:
           <div><strong>Palantir Foundry Foundations Certified</strong> — Palantir Technologies</div>
           <div><strong>Master of Science in Information Technology (M.Sc IT)</strong> — Sarvoday College (2014 - 2016)</div>
           <div><strong>Bachelor of Computer Applications (BCA)</strong> — Sarvoday College (2011 - 2014)</div>
+          ${format === 'in' ? '<div style="margin-top:0.35rem;"><strong>Location Preference & Mobility:</strong> Based in Ahmedabad, Gujarat • Open to relocation or hybrid roles in Bengaluru, Hyderabad, Pune, Mumbai, NCR & Remote India • Notice Period: Standard / Flexible.</div>' : ''}
           ${format === 'eu' ? '<div style="margin-top:0.35rem;"><strong>Language Proficiencies (CEFR):</strong> English (Full Professional / C2), Hindi (Native / C2), Gujarati (Native / C2).</div>' : ''}
           ${format === 'uae' ? '<div style="margin-top:0.35rem;"><strong>Relocation & Visa Status:</strong> Immediate visa readiness, willing to relocate to Dubai/Abu Dhabi within standard notice period.</div>' : ''}
           ${format === 'apac' ? '<div style="margin-top:0.35rem;"><strong>References:</strong> Professional referees, verified employment credentials, and technical references available upon request.</div>' : ''}
@@ -1955,7 +1990,15 @@ Requirements:
 
     // Opening Hook calibrated by Tone & Tier
     let openingHook = '';
-    if (tone === 'eu') {
+    if (tone === 'in') {
+      if (tier === 'staff') {
+        openingHook = `I am writing to express my enthusiastic interest in the <strong>${role}</strong> role at <strong>${company}</strong>. With a decade of software engineering leadership in India—spearheading distributed systems architecture as a Technical Lead at Rapidops and consulting for Fortune 500 enterprises at Infosys—I offer the architectural maturity, 50,000 QPS scale, and technical mentorship needed to scale your core engineering platforms across India's premier tech hubs.`;
+      } else if (tier === 'senior') {
+        openingHook = `I am writing to apply for the <strong>${role}</strong> position at <strong>${company}</strong>. Over the past 10 years, I have dedicated myself to hands-on systems programming in Node.js, Python (FastAPI), React, and high-concurrency microservices. I thrive in high-ownership product environments, solving complex database and latency bottlenecks, and delivering rock-solid production features on schedule.`;
+      } else {
+        openingHook = `I am delighted to submit my application for the <strong>${role}</strong> position at <strong>${company}</strong>. Having spent the last 10 years leading multidisciplinary engineering squads of 15+ developers at Rapidops and delivering scalable platforms at Infosys, I bring hands-on architectural depth, disciplined agile delivery, and team mentorship ready to make an immediate impact at <strong>${company}</strong>.`;
+      }
+    } else if (tone === 'eu') {
       if (tier === 'staff') {
         openingHook = `I am writing to formally submit my candidacy for the <strong>${role}</strong> position at <strong>${company}</strong>. With a decade of software engineering craftsmanship and proven experience steering distributed systems strategy, architectural governance, and multi-team technical delivery, I offer both technical rigor and diplomatic engineering leadership. Working in full alignment with UK & European business hours (GMT/CET), I am enthusiastic about partnering with your engineering squads to architect resilient platforms for the long term.`;
       } else if (tier === 'senior') {
@@ -2055,7 +2098,9 @@ Requirements:
 
     // Regional & Cultural Value Alignment
     let regionalAlignment = '';
-    if (tone === 'eu') {
+    if (tone === 'in') {
+      regionalAlignment = `Having spent a decade delivering software across India's premier IT and engineering ecosystems, I appreciate the critical balance between rapid sprint velocity, solid architectural design, and squad mentorship. Based in Ahmedabad with complete openness to Bengaluru, Hyderabad, Pune, NCR, and Remote India, I look forward to driving high-impact technical deliveries for <strong>${company}</strong>.`;
+    } else if (tone === 'eu') {
       regionalAlignment = `Working with distributed international teams has taught me the paramount importance of clear asynchronous communication, exhaustive architectural documentation, and disciplined code review standards. I am fully equipped to operate within European working hours (GMT/CET) and adhere to strict engineering compliance frameworks.`;
     } else if (tone === 'uae') {
       regionalAlignment = `The rapid pace of technological innovation in the UAE demands platforms engineered for extreme reliability and seamless user experience. With immediate readiness to relocate to Dubai/Abu Dhabi and a deep commitment to regional growth, I am eager to establish long-term roots and drive your technological leadership forward.`;
@@ -3504,7 +3549,7 @@ You are writing a tailored cover letter for:
 - Role: ${role}
 - Hiring Committee: ${manager}
 - Role Level: ${tier} (staff = strategic systems design & architecture, lead = squad mentorship & agile microservices delivery, senior = hands-on high QPS microservices & low latency)
-- Cultural Tone: ${tone} (us = direct, ROI, metrics-driven; eu = structured, engineering rigor, GMT/CET remote overlap; uae = enterprise scale, high-volume consumer systems, immediate relocation readiness; apac = collaborative, egalitarian, verified referees; startup = 0-to-1 builder, high velocity)
+- Cultural Tone: ${tone} (in = India tech hubs, unicorns & GCCs: high ownership, rapid engineering velocity, 50k QPS scale, squad leadership, flexible notice; us = direct, ROI, metrics-driven; eu = structured, engineering rigor, GMT/CET remote overlap; uae = enterprise scale, high-volume consumer systems, immediate relocation readiness; apac = collaborative, egalitarian, verified referees; startup = 0-to-1 builder, high velocity)
 - Flagship achievements to spotlight: ${spotlights.join(', ') || '50k QPS microservices, Redis caching, 15+ engineer mentorship'}
 - Specific Context / JD notes: ${customHighlights || 'Full-stack engineering leadership and distributed systems scale'}
 
