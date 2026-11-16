@@ -5,6 +5,7 @@
  * =========================================================================
  */
 
+import { ProfileStore } from './profile-store.js';
 import {
   PROFILE_INFO,
   RECRUITER_ROLES,
@@ -293,6 +294,31 @@ export class CareerOS {
     this.renderAll();
     this.startWorldClock();
     this.checkHashRoute();
+    this.updateProfileBadge();
+
+    ProfileStore.subscribe(() => {
+      this.updateProfileBadge();
+      this.renderAll();
+    });
+  }
+
+  updateProfileBadge() {
+    const info = ProfileStore.getProfileInfo();
+    const isCustom = ProfileStore.isCustom();
+    const subtitleEl = document.querySelector('.cos-subtitle');
+    if (subtitleEl) {
+      subtitleEl.textContent = `${info.name} • Master Career Command Center`;
+    }
+    const badge = document.getElementById('cosActiveProfileBadge');
+    if (badge) {
+      if (isCustom) {
+        badge.className = 'cos-profile-badge active-custom';
+        badge.innerHTML = `<span>👤 ${this.escapeHtml(info.name)}</span><span class="badge-tag">Custom Active</span>`;
+      } else {
+        badge.className = 'cos-profile-badge default-demo';
+        badge.innerHTML = `<span>👤 Savan Karathiya</span><span class="badge-tag">Demo Showcase</span>`;
+      }
+    }
   }
 
   /* -------------------------------------------------------------------------
@@ -1413,13 +1439,13 @@ export class CareerOS {
     const matched = [];
     const missing = [];
 
-    // Savan's known core skill set (lowercased)
-    const savanSkills = SKILLS_DATA.map(s => s.name.toLowerCase());
-    savanSkills.push('microservices', 'distributed systems', 'system design', 'mentorship', 'team lead', 'technical lead', 'agile', 'fastapi', ...this.customInjectedKeywords.map(k => k.toLowerCase()));
+    // Candidate's known core skill set (lowercased)
+    const profileSkills = ProfileStore.getSkills().map(s => s.name.toLowerCase());
+    profileSkills.push('microservices', 'distributed systems', 'system design', 'mentorship', 'team lead', 'technical lead', 'agile', 'fastapi', ...this.customInjectedKeywords.map(k => k.toLowerCase()));
 
     techLexicon.forEach(item => {
       if (jdLower.includes(item.term)) {
-        const isKnown = savanSkills.some(s => s.includes(item.term) || item.term.includes(s));
+        const isKnown = profileSkills.some(s => s.includes(item.term) || item.term.includes(s));
         if (isKnown || this.customInjectedKeywords.includes(item.label)) {
           if (!matched.some(m => m.label === item.label)) matched.push(item);
         } else {
@@ -1431,7 +1457,7 @@ export class CareerOS {
     // Score calculation formula
     const totalFound = matched.length + missing.length;
     let score = totalFound > 0 ? Math.round((matched.length / totalFound) * 100) : 88;
-    score = Math.max(score, 78); // Savan has 10 yrs exp, strong baseline
+    score = Math.max(score, 78); // Strong baseline for calibrated profiles
 
     // Update UI elements
     const dial = document.getElementById('cosScoreDial');
@@ -1632,37 +1658,44 @@ Requirements:
       `;
     }
 
+    const info = ProfileStore.getProfileInfo();
+    const isCustom = ProfileStore.isCustom();
+    if (isCustom) {
+      roleTitle = info.title || roleTitle;
+      summaryText = info.summary || info.tagline || summaryText;
+    }
+
     // Country specific contact line
     let contactLine = '';
     if (format === 'us') {
       // Strict US ATS: Single-column, no photo, no full street, city/country only
       contactLine = `
-        <span>Ahmedabad, India (Open to US Remote / Relocation)</span>
+        <span>${this.escapeHtml(info.location || 'Remote')}</span>
         <span>•</span>
-        <span>${PROFILE_INFO.email}</span>
+        <span>${this.escapeHtml(info.email)}</span>
         <span>•</span>
-        <span>${PROFILE_INFO.linkedin}</span>
+        <span>${this.escapeHtml(info.linkedin || '')}</span>
       `;
     } else if (format === 'eu') {
       // European format: Includes language proficiency & GMT/CET overlap
       contactLine = `
-        <span>Ahmedabad, India • Available for UK & EU Remote (Full GMT/CET Overlap) & Relocation</span>
+        <span>${this.escapeHtml(info.location || 'Remote')} • Available for UK & EU Remote (Full GMT/CET Overlap) & Relocation</span>
         <span>•</span>
-        <span>${PROFILE_INFO.email} • ${PROFILE_INFO.linkedin}</span>
+        <span>${this.escapeHtml(info.email)} • ${this.escapeHtml(info.linkedin || '')}</span>
       `;
     } else if (format === 'uae') {
       // Gulf format: Highlight immediate visa/relocation readiness
       contactLine = `
-        <span>Ahmedabad, India • Actively Relocating to UAE / Dubai (Immediate Visa Readiness)</span>
+        <span>${this.escapeHtml(info.location || 'Remote')} • Open to UAE / Dubai Relocation (Immediate Visa Readiness)</span>
         <span>•</span>
-        <span>${PROFILE_INFO.email} • ${PROFILE_INFO.linkedin}</span>
+        <span>${this.escapeHtml(info.email)} • ${this.escapeHtml(info.linkedin || '')}</span>
       `;
     } else {
       // APAC / Australia format
       contactLine = `
-        <span>Ahmedabad, India • Open to Australia / Singapore Remote & Relocation</span>
+        <span>${this.escapeHtml(info.location || 'Remote')} • Open to Australia / Singapore Remote & Relocation</span>
         <span>•</span>
-        <span>${PROFILE_INFO.email} • ${PROFILE_INFO.linkedin}</span>
+        <span>${this.escapeHtml(info.email)} • ${this.escapeHtml(info.linkedin || '')}</span>
       `;
     }
 
@@ -1671,14 +1704,14 @@ Requirements:
       ? `<div style="margin-top:0.35rem; font-size:0.75rem; color:#0284c7;"><strong>Target Injected Focus:</strong> ${this.customInjectedKeywords.join(', ')}</div>`
       : '';
 
-    // Experience Bullets formatted in Google's XYZ Formula
-    const rapidopsExp = EXPERIENCES_DATA[0];
-    const infosysExp = EXPERIENCES_DATA[1];
+    const experiences = ProfileStore.getExperiences();
+    const exp1 = experiences[0] || { role: roleTitle, company: 'Enterprise Inc.', period: '2022 - Present' };
+    const exp2 = experiences[1] || { role: 'Software Engineer', company: 'Consulting Ltd.', period: '2018 - 2022' };
 
     preview.innerHTML = `
       <div class="resume-header-block">
-        <h1 class="resume-applicant-name">${PROFILE_INFO.name}</h1>
-        <div class="resume-applicant-title">${roleTitle}</div>
+        <h1 class="resume-applicant-name">${this.escapeHtml(info.name)}</h1>
+        <div class="resume-applicant-title">${this.escapeHtml(roleTitle)}</div>
         <div class="resume-contact-line">${contactLine}</div>
         ${injectedBadge}
       </div>
@@ -1703,31 +1736,45 @@ Requirements:
       <div class="resume-section">
         <div class="resume-section-title">Professional Experience</div>
 
-        <!-- Rapidops -->
-        <div class="resume-exp-item">
-          <div class="resume-exp-header">
-            <div>
-              <span class="resume-exp-role">${tier === 'staff' ? 'Staff Systems Architect / Tech Lead' : (tier === 'senior' ? 'Senior Software Engineer (Systems)' : rapidopsExp.role)}</span> — <span class="resume-exp-company">${rapidopsExp.company}</span>
+        ${isCustom ? experiences.map(exp => `
+          <div class="resume-exp-item">
+            <div class="resume-exp-header">
+              <div>
+                <span class="resume-exp-role">${this.escapeHtml(exp.role)}</span> — <span class="resume-exp-company">${this.escapeHtml(exp.company)}</span>
+              </div>
+              <span class="resume-exp-date">${this.escapeHtml(exp.period || '')}</span>
             </div>
-            <span class="resume-exp-date">${rapidopsExp.period}</span>
+            <ul class="resume-bullets">
+              ${(exp.bullets || exp.responsibilities || [exp.summary || '']).map(b => `<li>${this.escapeHtml(b)}</li>`).join('')}
+            </ul>
           </div>
-          <ul class="resume-bullets">
-            ${rapidopsBullets.map(b => `<li>${b}</li>`).join('')}
-          </ul>
-        </div>
+        `).join('') : `
+          <!-- Rapidops -->
+          <div class="resume-exp-item">
+            <div class="resume-exp-header">
+              <div>
+                <span class="resume-exp-role">${tier === 'staff' ? 'Staff Systems Architect / Tech Lead' : (tier === 'senior' ? 'Senior Software Engineer (Systems)' : exp1.role)}</span> — <span class="resume-exp-company">${exp1.company}</span>
+              </div>
+              <span class="resume-exp-date">${exp1.period}</span>
+            </div>
+            <ul class="resume-bullets">
+              ${rapidopsBullets.map(b => `<li>${b}</li>`).join('')}
+            </ul>
+          </div>
 
-        <!-- Infosys -->
-        <div class="resume-exp-item">
-          <div class="resume-exp-header">
-            <div>
-              <span class="resume-exp-role">${tier === 'staff' ? 'Lead Enterprise Architect / Consultant' : (tier === 'senior' ? 'Senior Software Engineer (Full Stack)' : infosysExp.role)}</span> — <span class="resume-exp-company">${infosysExp.company}</span>
+          <!-- Infosys -->
+          <div class="resume-exp-item">
+            <div class="resume-exp-header">
+              <div>
+                <span class="resume-exp-role">${tier === 'staff' ? 'Lead Enterprise Architect / Consultant' : (tier === 'senior' ? 'Senior Software Engineer (Full Stack)' : exp2.role)}</span> — <span class="resume-exp-company">${exp2.company}</span>
+              </div>
+              <span class="resume-exp-date">${exp2.period}</span>
             </div>
-            <span class="resume-exp-date">${infosysExp.period}</span>
+            <ul class="resume-bullets">
+              ${infosysBullets.map(b => `<li>${b}</li>`).join('')}
+            </ul>
           </div>
-          <ul class="resume-bullets">
-            ${infosysBullets.map(b => `<li>${b}</li>`).join('')}
-          </ul>
-        </div>
+        `}
       </div>
 
       <!-- Key Architectural Projects -->
@@ -1786,12 +1833,14 @@ Requirements:
     const preview = document.getElementById('resumePreviewPanel');
     if (!preview) return;
 
-    const md = `# Savan Karathiya - ${this.currentRoleTier.toUpperCase()} Resume\n\n` + preview.innerText;
+    const info = ProfileStore.getProfileInfo();
+    const safeName = (info.name || 'Candidate').replace(/[^a-zA-Z0-9_-]/g, '_');
+    const md = `# ${info.name} - ${this.currentRoleTier.toUpperCase()} Resume\n\n` + preview.innerText;
     const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `Savan_Karathiya_Resume_${this.currentCountryFormat.toUpperCase()}.md`;
+    link.download = `${safeName}_Resume_${this.currentCountryFormat.toUpperCase()}.md`;
     link.click();
     URL.revokeObjectURL(url);
     this.showToast('Downloaded Markdown Resume!');
@@ -2018,12 +2067,14 @@ Requirements:
       regionalAlignment = `What draws me most to <strong>${company}</strong> is your uncompromising commitment to engineering excellence and technological innovation. I am excited by the prospect of bringing my systems programming expertise, architectural leadership, and focus on quantifiable business outcomes to your talented team.`;
     }
 
+    const info = ProfileStore.getProfileInfo();
+
     paper.innerHTML = `
       <div class="cl-header">
-        <div class="cl-name">${PROFILE_INFO.name}</div>
+        <div class="cl-name">${this.escapeHtml(info.name)}</div>
         <div class="cl-title">${senderTitle}</div>
         <div class="cl-contact">
-          ${PROFILE_INFO.email} • ${PROFILE_INFO.linkedin} • Ahmedabad, India (Open to Remote & Relocation)
+          ${this.escapeHtml(info.email)} • ${this.escapeHtml(info.linkedin || '')} • ${this.escapeHtml(info.location || 'Remote')}
         </div>
       </div>
 
@@ -2034,7 +2085,7 @@ Requirements:
       </div>
 
       <div class="cl-subject-line">
-        <strong>SUBJECT: Application for ${role} — Savan Karathiya</strong>
+        <strong>SUBJECT: Application for ${role} — ${this.escapeHtml(info.name)}</strong>
       </div>
 
       <div class="cl-body">
@@ -2056,9 +2107,9 @@ Requirements:
 
         <div class="cl-signoff">
           <p style="margin-bottom:0.4rem;">Sincerely,</p>
-          <div class="cl-signature-name">${PROFILE_INFO.name}</div>
+          <div class="cl-signature-name">${this.escapeHtml(info.name)}</div>
           <div class="cl-signature-title">${senderTitle}</div>
-          <div class="cl-signature-links">${PROFILE_INFO.email} • ${PROFILE_INFO.linkedin}</div>
+          <div class="cl-signature-links">${this.escapeHtml(info.email)} • ${this.escapeHtml(info.linkedin || '')}</div>
         </div>
       </div>
     `;
@@ -2079,9 +2130,11 @@ Requirements:
     const paper = document.getElementById('clOutputPaper');
     if (!paper) return;
 
+    const info = ProfileStore.getProfileInfo();
+    const safeName = (info.name || 'Candidate').replace(/[^a-zA-Z0-9_-]/g, '_');
     const company = document.getElementById('clTargetCompany')?.value.trim() || 'Company';
     const role = document.getElementById('clTargetRole')?.value.trim() || 'Role';
-    const md = `# Savan Karathiya - Cover Letter - ${company}\n` +
+    const md = `# ${info.name} - Cover Letter - ${company}\n` +
       `**Position:** ${role}\n` +
       `**Date:** ${new Date().toISOString().split('T')[0]}\n\n` +
       `---\n\n` +
@@ -2092,7 +2145,7 @@ Requirements:
     const link = document.createElement('a');
     link.href = url;
     const safeCompany = company.replace(/[^a-zA-Z0-9_-]/g, '_');
-    link.download = `Savan_Karathiya_Cover_Letter_${safeCompany}.md`;
+    link.download = `${safeName}_Cover_Letter_${safeCompany}.md`;
     link.click();
     URL.revokeObjectURL(url);
     this.showToast(`Downloaded Cover Letter Markdown for ${company}!`);
@@ -2601,14 +2654,15 @@ Requirements:
           String(d.getUTCMinutes()).padStart(2, '0') + '00Z';
       };
 
+      const candidateName = ProfileStore.getProfileInfo().name || 'Candidate';
       const icsData = [
         'BEGIN:VCALENDAR',
         'VERSION:2.0',
-        'PRODID:-//Savan CareerOS//Interview Calendar//EN',
+        `PRODID:-//${candidateName} CareerOS//Interview Calendar//EN`,
         'CALSCALE:GREGORIAN',
         'METHOD:PUBLISH',
         'BEGIN:VEVENT',
-        `UID:careeros-int-${int.id}@savan.tech`,
+        `UID:careeros-int-${int.id}@careeros.local`,
         `DTSTAMP:${formatIcs(new Date())}`,
         `DTSTART:${formatIcs(start)}`,
         `DTEND:${formatIcs(end)}`,
@@ -3243,11 +3297,13 @@ Requirements:
 
     if (this.geminiApiKey) {
       try {
+        const profileInfo = ProfileStore.getProfileInfo();
+        const topSkills = ProfileStore.getSkills().slice(0, 10).map(s => s.name).join(', ');
         const prompt = `You are a Staff Technical Recruiter and Principal Resume Architect specializing in high-concurrency systems.
-Candidate: Savan Karathiya (10 years experience, Technical Lead at Rapidops, Ex-Systems Consultant at Infosys).
-Core Tech: Node.js, TypeScript, Python (FastAPI), React, PostgreSQL, Redis, Elasticsearch, Docker, Kubernetes, Microservices.
+Candidate: ${profileInfo.name} (${profileInfo.yearsExperience || '10'} years experience, ${profileInfo.role} at ${profileInfo.currentCompany || 'Technology Firm'}).
+Core Tech: ${topSkills || 'Node.js, TypeScript, Python, React, PostgreSQL, Redis, Elasticsearch, Docker, Kubernetes, Microservices'}.
 Role Calibration Tier: ${tier} (staff = systems strategy & governance, lead = squad mentorship & delivery velocity, senior = hands-on high QPS & concurrency).
-Target Experience: ${role === 'rapidops-lead' ? 'Technical Lead @ Rapidops' : role === 'rapidops-senior' ? 'Senior Systems Engineer @ Rapidops' : 'Senior Systems Consultant @ Infosys'}
+Target Experience: ${role === 'rapidops-lead' ? (profileInfo.currentCompany ? `${profileInfo.role} @ ${profileInfo.currentCompany}` : 'Technical Lead') : role === 'rapidops-senior' ? 'Senior Systems Engineer' : 'Senior Systems Consultant'}
 Job Description Excerpt: ${jdText ? jdText.slice(0, 800) : 'High-throughput microservices architecture and cloud backend systems'}
 Target ATS Keywords to Weave In: ${focusKeywords || 'Microservices, Redis, PostgreSQL, Latency'}
 
@@ -3439,8 +3495,10 @@ Respond ONLY with a valid JSON array of objects with keys "bullet", "metric", an
     `;
 
     try {
-      const prompt = `You are Savan Karathiya, an accomplished 10-year veteran Technical Lead and Systems Architect based in Ahmedabad, India.
-Your core tech stack: Node.js, TypeScript, Python (FastAPI), React, PostgreSQL, Redis, Elasticsearch, Docker, Kubernetes, High-Scale Microservices.
+      const profileInfo = ProfileStore.getProfileInfo();
+      const topSkills = ProfileStore.getSkills().slice(0, 10).map(s => s.name).join(', ');
+      const prompt = `You are ${profileInfo.name}, an accomplished ${profileInfo.yearsExperience || '10'}-year veteran ${profileInfo.role} based in ${profileInfo.location || 'Ahmedabad, India'}.
+Your core tech stack: ${topSkills || 'Node.js, TypeScript, Python (FastAPI), React, PostgreSQL, Redis, Elasticsearch, Docker, Kubernetes, High-Scale Microservices'}.
 You are writing a tailored cover letter for:
 - Company: ${company}
 - Role: ${role}
@@ -3464,10 +3522,10 @@ Return ONLY valid HTML paragraphs (<p>...</p>) for the body paragraphs. Do not w
 
       const fullLetterHtml = `
         <div class="cl-letterhead">
-          <div class="cl-applicant-name">SAVAN KARATHIYA</div>
-          <div class="cl-applicant-role">Technical Lead & Systems Architect • 10 Years Experience</div>
+          <div class="cl-applicant-name">${this.escapeHtml(profileInfo.name.toUpperCase())}</div>
+          <div class="cl-applicant-role">${this.escapeHtml(profileInfo.role)} • ${this.escapeHtml(profileInfo.yearsExperience || '10')} Years Experience</div>
           <div class="cl-contact">
-            Ahmedabad, India • savan.career@gmail.com • +91 99999 99999 • linkedin.com/in/savankansara • github.com/savankansara
+            ${this.escapeHtml(profileInfo.location || '')} • ${this.escapeHtml(profileInfo.email || '')} • ${this.escapeHtml(profileInfo.phone || '')} • ${this.escapeHtml(profileInfo.linkedin || '')} • ${this.escapeHtml(profileInfo.github || '')}
           </div>
         </div>
 
@@ -3497,9 +3555,9 @@ Return ONLY valid HTML paragraphs (<p>...</p>) for the body paragraphs. Do not w
 
         <div class="cl-signoff">
           <p>Sincerely,</p>
-          <div class="cl-signature-hand">Savan Karathiya</div>
-          <div style="font-size:0.85rem; font-weight:700; color:#0f172a;">Savan Karathiya</div>
-          <div style="font-size:0.75rem; color:#64748b;">Technical Lead & Distributed Systems Architect</div>
+          <div class="cl-signature-hand">${this.escapeHtml(profileInfo.name)}</div>
+          <div style="font-size:0.85rem; font-weight:700; color:#0f172a;">${this.escapeHtml(profileInfo.name)}</div>
+          <div style="font-size:0.75rem; color:#64748b;">${this.escapeHtml(profileInfo.role)}</div>
         </div>
       `;
 
@@ -3566,17 +3624,19 @@ Return ONLY valid HTML paragraphs (<p>...</p>) for the body paragraphs. Do not w
 
     if (this.geminiApiKey) {
       try {
+        const profileInfo = ProfileStore.getProfileInfo();
+        const topSkills = ProfileStore.getSkills().slice(0, 10).map(s => s.name).join(', ');
         const prompt = `You are a Principal Systems Architect and Executive Hiring Manager at ${company}.
-Candidate: Savan Karathiya (10-year veteran Technical Lead & Systems Architect).
-Candidate Profile: Node.js, TypeScript, Python (FastAPI), React, PostgreSQL, Redis caching, Elasticsearch (10M+ docs), Docker, Kubernetes, microservices processing 50k QPS, team lead for 15+ engineers at Rapidops.
+Candidate: ${profileInfo.name} (${profileInfo.yearsExperience || '10'}-year veteran ${profileInfo.role}).
+Candidate Profile: ${topSkills || 'Node.js, TypeScript, Python, React, PostgreSQL, Redis, Elasticsearch, Docker, Kubernetes'}, microservices architecture, technical squad leadership at ${profileInfo.currentCompany || 'Rapidops'}.
 Simulating: ${round.replace('_', ' ').toUpperCase()} round for ${role} at ${company}.
 Focus Topics: ${topics || 'High QPS microservices, Redis caching, P99 latency, squad mentorship'}
 
 Generate a high-yield Interview Simulation Brief formatted as clean HTML:
 1. <h4 style="color:var(--accent-cyan-light); margin-bottom:0.5rem;">🎯 Top 4 High-Probability Questions for this Round</h4>
    Include 4 questions specific to ${company}'s scale, followed by concise STAR talking points and architecture trade-offs.
-2. <h4 style="color:#a855f7; margin:1rem 0 0.5rem;">🏗️ Architectural Case Studies from Savan's Portfolio to Highlight</h4>
-   Show exactly how to bring up the 50k QPS microservices engine, Elasticsearch 10M+ documents, and 15-dev squad leadership.
+2. <h4 style="color:#a855f7; margin:1rem 0 0.5rem;">🏗️ Architectural Case Studies from ${profileInfo.name}'s Portfolio to Highlight</h4>
+   Show exactly how to bring up real-world system architecture, data throughput, and squad leadership.
 3. <h4 style="color:#10b981; margin:1rem 0 0.5rem;">💡 3 Strategic Reverse Questions to Ask the Interviewer</h4>
    Questions demonstrating senior architectural ownership.
 
@@ -3598,7 +3658,7 @@ Return ONLY clean HTML with no wrapping markdown codeblocks.`;
             <span>Q1: How would you design a distributed microservices architecture to handle 50,000+ QPS with sub-25ms P99 latency?</span>
           </div>
           <div class="cos-ai-a-box">
-            <strong>Key Talking Points (Savan's 10-Yr Experience):</strong><br>
+            <strong>Key Talking Points (${this.escapeHtml(ProfileStore.getProfileInfo().name)}'s Experience):</strong><br>
             • <em>Layered Caching:</em> Implement multi-tier Redis caching (L1 local in-memory LRU + L2 distributed Redis cluster with read-through replication).<br>
             • <em>Asynchronous Decoupling:</em> Offload writes and audit logs to message queues to keep HTTP request-response cycles ultra-lean.<br>
             • <em>Database Tier:</em> Connection pooling (PgBouncer), read replicas with connection routing, and partitioned tables by time/tenant.<br>
@@ -3665,11 +3725,13 @@ Return ONLY clean HTML with no wrapping markdown codeblocks.`;
   }
 
   exportBackupJSON() {
+    const candidateName = ProfileStore.getProfileInfo().name || 'Candidate';
+    const safeName = candidateName.replace(/[^a-zA-Z0-9_-]/g, '_');
     const backupData = {
       system: 'CareerOS Command Center',
       version: '2.0',
       exportedAt: new Date().toISOString(),
-      applicant: 'Savan Karathiya',
+      applicant: candidateName,
       meta: {
         totalJobs: this.jobs.length,
         totalInterviews: this.interviews.length,
@@ -3690,7 +3752,7 @@ Return ONLY clean HTML with no wrapping markdown codeblocks.`;
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(backupData, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', `CareerOS_Backup_Savan_${new Date().toISOString().split('T')[0]}.json`);
+    downloadAnchor.setAttribute('download', `CareerOS_Backup_${safeName}_${new Date().toISOString().split('T')[0]}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();

@@ -118,6 +118,12 @@
           <span>⚡ Recruiter Mode</span>
         </button>
 
+        <!-- Universal Profile Manager & Ingestion Engine -->
+        <button id="cosProfileManagerNavBtn" class="btn btn-secondary btn-sm" title="Import or Customize Candidate Profile">
+          <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+          <span>Edit Profile</span>
+        </button>
+
         <!-- Print / ATS CV Download -->
         <button class="btn btn-secondary btn-sm trigger-print-btn" title="Print or Save PDF Resume">
           <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
@@ -720,6 +726,11 @@ Best regards,
 
       <!-- Right Header Actions -->
       <div class="cos-header-right">
+        <!-- Active Candidate Profile Badge & Switcher -->
+        <button class="cos-profile-badge default-demo" id="cosHeaderProfileBtn" title="Profile Manager: Click to import or customize profile">
+          <span>👤 Savan Karathiya</span>
+          <span class="badge-tag">Demo Showcase</span>
+        </button>
         <button class="cos-btn-icon" id="cosQuickExportBtn" title="Export Backup JSON">
           <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
         </button>
@@ -1324,6 +1335,24 @@ Best regards,
             </div>
           </div>
 
+          <!-- Universal Candidate Profile Manager Card -->
+          <div class="settings-card">
+            <h3 class="settings-card-title">
+              <span>👤</span>
+              <span>Candidate Profile & Ingestion Engine</span>
+            </h3>
+            <p class="settings-card-desc">
+              CareerOS is a universal open-source engine. Anyone can import their resume (JSON, PDF, Word, or manual form) to adapt the entire portfolio and CareerOS to their career.
+            </p>
+
+            <div style="display:flex; flex-direction:column; gap:0.65rem;">
+              <button class="btn btn-primary btn-sm" id="cosProfileManagerSettingsBtn">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                <span>Open Profile Manager & Ingestion</span>
+              </button>
+            </div>
+          </div>
+
           <!-- Data Portability & Backup Card -->
           <div class="settings-card">
             <h3 class="settings-card-title">
@@ -1756,6 +1785,345 @@ Best regards,
           <button type="submit" class="btn btn-primary btn-sm">Add Task</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       CAREEROS MODAL: UNIVERSAL PROFILE MANAGER & INGESTION ENGINE
+       ===================================================================== -->
+  <div class="cos-modal-backdrop" id="cosProfileModalBackdrop">
+    <div class="cos-modal-card profile-manager-modal" style="max-width: 820px; max-height: 90vh;">
+      <div class="cos-modal-header">
+        <div>
+          <h3 class="cos-modal-title">👤 Universal Candidate Profile Manager</h3>
+          <p style="font-size:0.78rem; color:var(--text-muted); margin:0.25rem 0 0 0;">
+            Import or edit candidate data. Adapts the public portfolio and CareerOS in real-time.
+          </p>
+        </div>
+        <button class="cos-modal-close" id="cosCloseProfileModalBtn">&times;</button>
+      </div>
+
+      <!-- Navigation Tabs inside Profile Modal -->
+      <div class="profile-modal-tabs">
+        <button type="button" class="profile-tab-btn active" data-tab="ingest">📄 Quick Ingest (File / AI)</button>
+        <button type="button" class="profile-tab-btn" data-tab="basic">👤 Basic Info & Avatar</button>
+        <button type="button" class="profile-tab-btn" data-tab="skills">⚡ Skills Matrix</button>
+        <button type="button" class="profile-tab-btn" data-tab="exp">🏢 Experience</button>
+        <button type="button" class="profile-tab-btn" data-tab="projects">🚀 Projects</button>
+        <button type="button" class="profile-tab-btn" data-tab="edu">🎓 Education & Certs</button>
+      </div>
+
+      <div class="profile-modal-body" style="overflow-y:auto; max-height:calc(90vh - 200px); padding:1rem 0;">
+        <!-- TAB 1: QUICK INGESTION -->
+        <div class="profile-tab-pane active" id="profileTab-ingest">
+          <div class="profile-dropzone" id="profileFileDropzone">
+            <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+            <div style="font-weight:600; font-size:0.95rem; margin-top:0.5rem; color:var(--text-primary);">
+              Click or drag-and-drop your Resume / Profile file here
+            </div>
+            <div style="font-size:0.78rem; color:var(--text-muted); margin-top:0.25rem;">
+              Supports <strong>.json</strong>, <strong>.pdf</strong>, <strong>.docx</strong> (Word), <strong>.txt</strong>, <strong>.md</strong>
+            </div>
+            <div id="profileFileStatusBadge" style="display:none; margin-top:0.6rem; font-size:0.78rem; padding:0.3rem 0.75rem; border-radius:9999px; background:rgba(6,182,212,0.15); color:var(--accent-cyan-light); font-weight:600; display:inline-block;"></div>
+            <input type="file" id="profileFileInput" accept=".json,.txt,.pdf,.docx,.md" style="display:none;">
+          </div>
+
+          <div style="text-align:center; margin:1rem 0; font-size:0.8rem; color:var(--text-muted); position:relative;">
+            <span style="background:var(--bg-card); padding:0 0.75rem; position:relative; z-index:2;">OR PASTE RAW RESUME TEXT</span>
+            <hr style="border:none; border-top:1px solid var(--border-light); margin:-0.55rem 0 0 0;">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="profilePasteTextInput">Paste Full Resume Text / LinkedIn Export:</label>
+            <textarea id="profilePasteTextInput" class="form-input" rows="6" placeholder="Paste your resume plain text here (e.g. from LinkedIn PDF, Word document, or plain text)..."></textarea>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-top:0.75rem;">
+            <button type="button" class="btn btn-secondary btn-sm" id="profileDownloadTemplateBtn">
+              📥 Download Sample JSON Template
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" id="profileParseBtn">
+              <span>✨ Parse & Auto-Fill Profile</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 2: BASIC INFO & AVATAR -->
+        <div class="profile-tab-pane" id="profileTab-basic">
+          <!-- Avatar Uploader Row -->
+          <div style="display:flex; align-items:center; gap:1.25rem; padding:1rem; background:rgba(255,255,255,0.02); border:1px solid var(--border-light); border-radius:var(--radius-md); margin-bottom:1.25rem;">
+            <div style="position:relative;">
+              <img id="profAvatarPreview" src="assets/savan_profile.jpg" alt="Avatar Preview" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid var(--accent-cyan);">
+            </div>
+            <div style="flex:1;">
+              <div style="font-weight:600; font-size:0.9rem; color:var(--text-primary); margin-bottom:0.25rem;">Candidate Photo / Avatar</div>
+              <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.6rem;">Upload JPG/PNG image. Auto-resized and compressed locally to base64.</div>
+              <div style="display:flex; gap:0.5rem;">
+                <label class="btn btn-secondary btn-sm" style="cursor:pointer; margin:0;">
+                  <span>Upload Image</span>
+                  <input type="file" id="profAvatarFileInput" accept="image/*" style="display:none;">
+                </label>
+                <button type="button" class="btn btn-secondary btn-sm" id="profRemoveAvatarBtn" style="color:#ef4444;">
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="profNameInput">Full Name</label>
+              <input type="text" id="profNameInput" class="form-input" placeholder="e.g. Alex Mercer" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="profTitleInput">Professional Title</label>
+              <input type="text" id="profTitleInput" class="form-input" placeholder="e.g. Principal Systems Architect" required>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="profEmailInput">Email Address</label>
+              <input type="email" id="profEmailInput" class="form-input" placeholder="e.g. alex@example.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="profLinkedinInput">LinkedIn Profile URL</label>
+              <input type="url" id="profLinkedinInput" class="form-input" placeholder="https://linkedin.com/in/alexmercer">
+            </div>
+          </div>
+
+          <div class="form-row-3">
+            <div class="form-group">
+              <label class="form-label" for="profLocationInput">Location / Base</label>
+              <input type="text" id="profLocationInput" class="form-input" placeholder="e.g. Toronto, Canada / Remote">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="profExpYearsInput">Years Experience</label>
+              <input type="text" id="profExpYearsInput" class="form-input" placeholder="e.g. 10+">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="profStatusInput">Availability Status</label>
+              <input type="text" id="profStatusInput" class="form-input" placeholder="e.g. Available for Lead Roles">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="profTaglineInput">Tagline / Headline</label>
+            <input type="text" id="profTaglineInput" class="form-input" placeholder="e.g. Architecting high-throughput distributed microservices...">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="profSummaryInput">Executive Summary</label>
+            <textarea id="profSummaryInput" class="form-input" rows="3" placeholder="Full executive summary for portfolio and ATS resume..."></textarea>
+          </div>
+        </div>
+
+        <!-- TAB 3: SKILLS MATRIX -->
+        <div class="profile-tab-pane" id="profileTab-skills">
+          <div style="background:rgba(255,255,255,0.02); padding:0.75rem 1rem; border-radius:var(--radius-md); border:1px solid var(--border-light); margin-bottom:1rem;">
+            <div style="font-weight:600; font-size:0.85rem; margin-bottom:0.5rem; color:var(--text-primary);">+ Add New Skill</div>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
+              <input type="text" id="profNewSkillName" class="form-input" placeholder="Skill Name (e.g. Docker)" style="flex:2; min-width:140px;">
+              <select id="profNewSkillCategory" class="form-input" style="flex:1; min-width:110px;">
+                <option value="core">Core Languages</option>
+                <option value="backend">Backend & APIs</option>
+                <option value="frontend">Frontend & UI</option>
+                <option value="data">Databases & Data</option>
+                <option value="cloud">Cloud & DevOps</option>
+                <option value="tools">Leadership & Tools</option>
+              </select>
+              <input type="number" id="profNewSkillLevel" class="form-input" placeholder="Level %" min="50" max="100" value="90" style="width:80px;">
+              <label style="font-size:0.78rem; display:flex; align-items:center; gap:0.25rem; color:var(--text-secondary); cursor:pointer;">
+                <input type="checkbox" id="profNewSkillHighlight" checked> Featured
+              </label>
+              <button type="button" class="btn btn-primary btn-sm" id="profAddSkillBtn">Add</button>
+            </div>
+          </div>
+          <div class="profile-chips-container" id="profSkillsList" style="display:flex; flex-wrap:wrap; gap:0.4rem;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- TAB 4: WORK EXPERIENCE -->
+        <div class="profile-tab-pane" id="profileTab-exp">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+            <span style="font-size:0.85rem; font-weight:600; color:var(--text-secondary);">Experience Timeline Items</span>
+            <button type="button" class="btn btn-secondary btn-sm" id="profAddExpBtn">+ Add Experience</button>
+          </div>
+
+          <!-- Inline Experience Editor Form -->
+          <div id="profExpEditorBox" class="profile-edit-subcard" style="display:none; margin-bottom:1rem;">
+            <div style="font-weight:600; font-size:0.88rem; color:var(--accent-cyan-light); margin-bottom:0.6rem;" id="profExpEditorTitle">
+              ✏️ Add / Edit Work Experience
+            </div>
+            <input type="hidden" id="profExpEditIndex" value="-1">
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="profExpRole">Role Title</label>
+                <input type="text" id="profExpRole" class="form-input" placeholder="e.g. Lead Systems Engineer">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="profExpCompany">Company Name</label>
+                <input type="text" id="profExpCompany" class="form-input" placeholder="e.g. Acme Tech Corp">
+              </div>
+            </div>
+            <div class="form-row-3">
+              <div class="form-group">
+                <label class="form-label" for="profExpPeriod">Period</label>
+                <input type="text" id="profExpPeriod" class="form-input" placeholder="e.g. 2022 - Present">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="profExpLocation">Location</label>
+                <input type="text" id="profExpLocation" class="form-input" placeholder="e.g. Remote / Toronto">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="profExpTeam">Squad / Team Size</label>
+                <input type="text" id="profExpTeam" class="form-input" placeholder="e.g. 15+ Engineers">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="profExpSummary">Role Summary</label>
+              <input type="text" id="profExpSummary" class="form-input" placeholder="Brief summary of domain and leadership scope...">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="profExpBullets">Key Impact Bullets (One per line)</label>
+              <textarea id="profExpBullets" class="form-input" rows="3" placeholder="• Scaled backend microservices to 50k QPS&#10;• Reduced P99 latency by 65% with Redis caching"></textarea>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
+              <button type="button" class="btn btn-secondary btn-sm" id="profCancelExpEditBtn">Cancel</button>
+              <button type="button" class="btn btn-primary btn-sm" id="profSaveExpEditBtn">Save Experience</button>
+            </div>
+          </div>
+
+          <div id="profExperiencesList" style="display:flex; flex-direction:column; gap:0.65rem;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- TAB 5: KEY PROJECTS -->
+        <div class="profile-tab-pane" id="profileTab-projects">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+            <span style="font-size:0.85rem; font-weight:600; color:var(--text-secondary);">Architectural Case Studies & Projects</span>
+            <button type="button" class="btn btn-secondary btn-sm" id="profAddProjBtn">+ Add Project</button>
+          </div>
+
+          <!-- Inline Project Editor Form -->
+          <div id="profProjEditorBox" class="profile-edit-subcard" style="display:none; margin-bottom:1rem;">
+            <div style="font-weight:600; font-size:0.88rem; color:var(--accent-cyan-light); margin-bottom:0.6rem;" id="profProjEditorTitle">
+              🚀 Add / Edit Architectural Case Study
+            </div>
+            <input type="hidden" id="profProjEditIndex" value="-1">
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="profProjTitle">Project / System Title</label>
+                <input type="text" id="profProjTitle" class="form-input" placeholder="e.g. Distributed Event-Driven Payment Gateway">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="profProjCategory">Architecture Category</label>
+                <select id="profProjCategory" class="form-input">
+                  <option value="microservices">Microservices & Systems</option>
+                  <option value="bigdata">Big Data & Observability</option>
+                  <option value="cloud">Cloud & DevOps</option>
+                  <option value="fullstack">Full Stack & Web Apps</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row-3">
+              <div class="form-group">
+                <label class="form-label" for="profProjRole">Role Scope</label>
+                <input type="text" id="profProjRole" class="form-input" placeholder="e.g. Lead Architect">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="profProjClient">Client / Domain</label>
+                <input type="text" id="profProjClient" class="form-input" placeholder="e.g. FinTech / Enterprise">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="profProjDuration">Duration</label>
+                <input type="text" id="profProjDuration" class="form-input" placeholder="e.g. 2023 - 2024">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="profProjSummary">Executive Summary</label>
+              <input type="text" id="profProjSummary" class="form-input" placeholder="Short description of the system...">
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="profProjProblem">Problem / Challenge</label>
+                <textarea id="profProjProblem" class="form-input" rows="2" placeholder="Bottlenecks, concurrency limits, or latency issues..."></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="profProjSolution">Architectural Solution</label>
+                <textarea id="profProjSolution" class="form-input" rows="2" placeholder="Design patterns, caching, asynchronous queues..."></textarea>
+              </div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="profProjImpact">Business / Performance Impact</label>
+                <input type="text" id="profProjImpact" class="form-input" placeholder="e.g. Handled 50k QPS with sub-25ms P99 latency...">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="profProjTech">Technologies (Comma separated)</label>
+                <input type="text" id="profProjTech" class="form-input" placeholder="e.g. Node.js, PostgreSQL, Redis, Docker, Kubernetes">
+              </div>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.5rem;">
+              <button type="button" class="btn btn-secondary btn-sm" id="profCancelProjEditBtn">Cancel</button>
+              <button type="button" class="btn btn-primary btn-sm" id="profSaveProjEditBtn">Save Project</button>
+            </div>
+          </div>
+
+          <div id="profProjectsList" style="display:flex; flex-direction:column; gap:0.65rem;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- TAB 6: EDUCATION, CERTS & LANGUAGES -->
+        <div class="profile-tab-pane" id="profileTab-edu">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+            <span style="font-size:0.85rem; font-weight:600; color:var(--text-secondary);">Higher Education & Degrees</span>
+            <button type="button" class="btn btn-secondary btn-sm" id="profAddEduBtn">+ Add Degree</button>
+          </div>
+          <div id="profEduList" style="display:flex; flex-direction:column; gap:0.65rem; margin-bottom:1.5rem;">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+            <span style="font-size:0.85rem; font-weight:600; color:var(--text-secondary);">Professional Certifications</span>
+            <button type="button" class="btn btn-secondary btn-sm" id="profAddCertBtn">+ Add Certification</button>
+          </div>
+          <div id="profCertsList" style="display:flex; flex-direction:column; gap:0.65rem; margin-bottom:1.5rem;">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+            <span style="font-size:0.85rem; font-weight:600; color:var(--text-secondary);">Languages & Proficiencies</span>
+            <button type="button" class="btn btn-secondary btn-sm" id="profAddLangBtn">+ Add Language</button>
+          </div>
+          <div id="profLangsList" style="display:flex; flex-wrap:wrap; gap:0.4rem;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer Actions -->
+      <div class="cos-modal-footer" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; padding-top:1rem; border-top:1px solid var(--border-light);">
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+          <button type="button" class="btn btn-secondary btn-sm" id="profResetDemoBtn" style="color:#ef4444; border-color:rgba(239,68,68,0.3);">
+            🔄 Reset to Savan's Demo
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" id="profExportJsonBtn">
+            💾 Export JSON
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" id="profExportBundleBtn" title="Generate data.js for your own GitHub Pages deployment">
+            📦 GitHub Pages Bundle
+          </button>
+        </div>
+
+        <div style="display:flex; gap:0.5rem;">
+          <button type="button" class="btn btn-secondary btn-sm" id="cosCancelProfileModalBtn">Cancel</button>
+          <button type="button" class="btn btn-primary btn-sm" id="profSaveProfileBtn">💾 Save & Apply Profile</button>
+        </div>
+      </div>
     </div>
   </div>
 
